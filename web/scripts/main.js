@@ -38,21 +38,23 @@ var vm = new Vue({
 		},
 
 		sendRequest() {
-			this.addDialog({
-				owner: OWNER_USER,
-				text: this.question,
-				time: getDate()
-			})
-
-			$.post('/api/get-answer', {q: this.question}).done(resp => {
+			if (this.question) {
 				this.addDialog({
-					owner: OWNER_BOT,
-					text: resp.a.trim(),
+					owner: OWNER_USER,
+					text: this.question,
 					time: getDate()
 				})
-			})
 
-			this.question = null
+				$.post('/api/get-answer', {q: this.question}).done(resp => {
+					this.addDialog({
+						owner: OWNER_BOT,
+						text: resp.a.trim(),
+						time: getDate()
+					})
+				})
+
+				this.question = null
+			}
 		}
 	},
 	computed: {
